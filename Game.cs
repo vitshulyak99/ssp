@@ -48,7 +48,7 @@ namespace SSP
         {
             var moves = _moves.ToArray();
             var d = moves.Length / 2;
-            var winningMoves = machineMove + d < moves.Length ? moves[(machineMove + 1)..moves.Length] : moves[(machineMove + 1)..moves.Length].Intersect(moves[0..((machineMove + d + 1) - moves.Length)]);
+            var winningMoves = machineMove + d < moves.Length ? moves[(machineMove + 1)..moves.Length] : moves[(machineMove + 1)..^1].Intersect(moves[..((machineMove + d + 1) - (moves.Length))]);
             return winningMoves.Any(x => x.Equals(_moves[move]));
         }
     }
