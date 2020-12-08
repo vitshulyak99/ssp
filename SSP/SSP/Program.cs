@@ -7,13 +7,13 @@ namespace SSP
     {
         private static void Main(string[] args)
         {
-            var a = args[0..];
-            if (CheckArgs(a))
+          
+            if (CheckArgs(args))
             {
                 Console.WriteLine("Invalid arguments. Args count must be unique, odd and more or equals 3 ");
                 return;
             }
-            var game = new Game(a, new Machine());
+            var game = new Game(args, new Machine());
             game.Start();
         }
 

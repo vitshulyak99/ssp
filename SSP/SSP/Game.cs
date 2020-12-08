@@ -24,12 +24,15 @@ namespace SSP
                 var (machineMove, hmacKey, hmak) = (_machine.Move(_moves), _machine.HmacKey, _machine.Hmac);
                 Console.WriteLine($"HMAC:{hmak}\nChoice yuo move");
                 _moves.ForEach(x => Console.WriteLine($"{_moves.IndexOf(x) + 1}: {x}"));
+                Console.WriteLine("0: exit");
                 Console.Write("You move: ");
-                var move = 0;
-                while (int.TryParse(Console.ReadLine(), out move) && move < 1 && move > _moves.Count)
+                int move = 0;
+                string input;
+                while (!(int.TryParse(input = Console.ReadLine(), out move) && ((input  ?? string.Empty).All(char.IsDigit))) || (move < 1 && move > _moves.Count))
                 {
-                    Console.WriteLine("Invalid move! Try again.");
+                    Console.Write("Invalid move! Try again.\nYou move: ");
                 }
+                if (move == 0) return;
                 move--;
                 isDraw = move.Equals(machineMove);
                 if (isDraw)
@@ -40,7 +43,7 @@ namespace SSP
                 {
                     Console.WriteLine(Check(machineMove, move) ? $"You win!" : $"You lose!");
                 }
-                Console.WriteLine($"Computer move is {_moves[machineMove]}\nHMAC key:{hmacKey}\ns");
+                Console.WriteLine($"Computer move is {_moves[machineMove]}\nHMAC key:{hmacKey}\n");
             } while (isDraw);
         }
 
@@ -48,7 +51,8 @@ namespace SSP
         {
             var moves = _moves.ToArray();
             var d = moves.Length / 2;
-            var winningMoves = machineMove + d < moves.Length ? moves[(machineMove + 1)..moves.Length] : moves[(machineMove + 1)..^1].Intersect(moves[..((machineMove + d + 1) - (moves.Length))]);
+            
+            var winningMoves = machineMove + d < moves.Length ? moves[(machineMove + 1)..moves.Length] : moves[(machineMove + 1)..^1].Intersect(moves[..((machineMove + d) - (moves.Length))]);
             return winningMoves.Any(x => x.Equals(_moves[move]));
         }
     }
